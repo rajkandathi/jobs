@@ -10,6 +10,7 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import <AddressBook/AddressBook.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OnMyWayContact.h"
 
 
 @interface OnMyWayViewController : UIViewController

@@ -22,6 +22,7 @@
 		393C407A173C87600055C12E /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393C4079173C87600055C12E /* AddressBookUI.framework */; };
 		393C407C173CA1D30055C12E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393C407B173CA1D30055C12E /* AddressBook.framework */; };
 		393C407E173CAA190055C12E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393C407D173CAA190055C12E /* CoreLocation.framework */; };
+		3954CA62173D5C9800BE3332 /* OnMyWayContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3954CA61173D5C9800BE3332 /* OnMyWayContact.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,8 @@
 		393C4079173C87600055C12E /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		393C407B173CA1D30055C12E /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		393C407D173CAA190055C12E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		3954CA60173D5C9800BE3332 /* OnMyWayContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnMyWayContact.h; sourceTree = "<group>"; };
+		3954CA61173D5C9800BE3332 /* OnMyWayContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnMyWayContact.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +105,8 @@
 				393C406C173C7D010055C12E /* MainStoryboard.storyboard */,
 				393C406F173C7D010055C12E /* OnMyWayViewController.h */,
 				393C4070173C7D010055C12E /* OnMyWayViewController.m */,
+				3954CA60173D5C9800BE3332 /* OnMyWayContact.h */,
+				3954CA61173D5C9800BE3332 /* OnMyWayContact.m */,
 				393C4077173C7D260055C12E /* TODO */,
 				393C405B173C7D010055C12E /* Supporting Files */,
 			);
@@ -193,6 +198,7 @@
 				393C4061173C7D010055C12E /* main.m in Sources */,
 				393C4065173C7D010055C12E /* OnMyWayAppDelegate.m in Sources */,
 				393C4071173C7D010055C12E /* OnMyWayViewController.m in Sources */,
+				3954CA62173D5C9800BE3332 /* OnMyWayContact.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +321,7 @@
 				393C4076173C7D010055C12E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

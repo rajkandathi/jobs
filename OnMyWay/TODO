@@ -1,8 +1,15 @@
-1. A screen to pick the contact your visiting (assume the contact has address saved).DONE
-2. Get the address co-ordinates of the contact.DONE
-3. Get your current co-ordinates.
+DONE 1. A screen to pick the contact your visiting (assume the contact has address saved).
+DONE 2. Get the address co-ordinates of the contact.
+DONE 3. Get your current co-ordinates.
 4. Calculate the distance between the two
 5. Send a message.
+6. Save the contact in NSUserDefaults
+7. Change images for the two buttons.
+DONE 8. Get Name to put in the greeting.
+DONE 9. Get Phone number for message.
+10. Check for comments and  brackets.
+DONE 11. Move all contact details to a contact class.
+
 
 
 
