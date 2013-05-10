@@ -15,6 +15,7 @@
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic) BOOL didPickDestination;
 @property (nonatomic, strong) OnMyWayContact *contact;
+@property (nonatomic) BOOL didFinishLookingUpAddress;
 
 @end
 
@@ -24,6 +25,7 @@
 @synthesize currentLocation = _currentLocation;
 @synthesize locationManager = _locationManager;
 @synthesize didPickDestination = _didPickDestination;
+@synthesize didFinishLookingUpAddress = _didFinishLookingUpAddress;
 
 - (ABPeoplePickerNavigationController *)peoplePicker
 {
@@ -47,6 +49,12 @@
         _contact = [[OnMyWayContact alloc] init];
     }
     return _contact;
+}
+
+- (void)showAlertMessage:(NSString *)message
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Hey there!" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alertView show];
 }
 
 - (void)updateGreetingLabel
@@ -105,6 +113,7 @@
 
 
 - (IBAction)sendUpdate:(id)sender {
+    
 }
 
 - (void)setLocationFromAddressDictionary:(NSDictionary *)address
@@ -116,6 +125,7 @@
         if (!error) {
             CLPlacemark *placemark = [placemarks lastObject];
             self.contact.destinationLocation = placemark.location;
+            self.didFinishLookingUpAddress = YES;
             NSLog(@"%@", self.contact.destinationLocation);
         }
     }];
@@ -159,21 +169,21 @@
 
 - (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person
 {
+    if (!person) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            [self showAlertMessage:@"Looks like you choose an invalid contact. Pick a different contact."];
+        }];
+        return NO;
+    }
     self.didPickDestination = YES;
     self.contact.destinationContactName = [self getPersonName:person];
     self.contact.destinationContactNumber = [self getPhoneNumber:person];
     [self dismissViewControllerAnimated:YES completion:^{
-        if (person) {
-            
-            NSDictionary *address = [self getAddressOfPerson:person];
-            if (!address) {
-                //TODO:Show an Error Message. "No Address"
-            } else {
-                //self.destinationLocation = [self getLocationFromAddressDictionary:address];
-                [self setLocationFromAddressDictionary:address];
-            }
+        NSDictionary *address = [self getAddressOfPerson:person];
+        if (!address) {
+            [self showAlertMessage:@"Looks like you don't have an address saved for your contact. Save an address to send update messages."];
         } else {
-            //TODO:Show an Error Message. "Invalid Contact"
+            [self setLocationFromAddressDictionary:address];
         }
     }];
     return NO;
