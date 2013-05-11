@@ -12,6 +12,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OnMyWayContact.h"
 #import <MessageUI/MessageUI.h>
+#import <QuartzCore/QuartzCore.h>
 
 
 @interface OnMyWayViewController : UIViewController

@@ -98,6 +98,15 @@
     [self.greetingTextLabel setAttributedText: attributedGreeting];
 }
 
+- (void)initializeMessageButton
+{
+    [self.sendUpdatesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.sendUpdatesButton.backgroundColor = [UIColor colorWithRed:0 green:255 blue:0 alpha:0.8];
+    self.sendUpdatesButton.layer.borderColor = [UIColor blackColor].CGColor;
+    self.sendUpdatesButton.layer.borderWidth = 0.5f;
+    self.sendUpdatesButton.layer.cornerRadius = 20.0f;
+}
+
 
 - (void)viewDidLoad
 {
@@ -112,6 +121,7 @@
     [super viewWillAppear:animated];
     //Initializing the greeting label.
     self.greetingTextLabel.numberOfLines = 3;
+    [self initializeMessageButton];
     [self updateGreetingLabel];
 }
 
@@ -173,6 +183,14 @@
 {
     //TODO: Check to see if location service is available.
     //TODO: Check to see if the app is authorized to use location services.
+    if (![CLLocationManager locationServicesEnabled]) {
+        [self showAlertMessage:@"Can you please enable Location service to use the app."];
+        return;
+    }
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        [self showAlertMessage:@"Please authorize the app to use location services on your phone before use."];
+        return;
+    }
     [self presentViewController:self.peoplePicker animated:YES completion:nil];
     [self startLocationManager];
 }
