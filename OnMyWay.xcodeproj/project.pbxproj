@@ -23,6 +23,7 @@
 		393C407C173CA1D30055C12E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393C407B173CA1D30055C12E /* AddressBook.framework */; };
 		393C407E173CAA190055C12E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393C407D173CAA190055C12E /* CoreLocation.framework */; };
 		3954CA62173D5C9800BE3332 /* OnMyWayContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3954CA61173D5C9800BE3332 /* OnMyWayContact.m */; };
+		3954CA64173D908300BE3332 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3954CA63173D908300BE3332 /* MessageUI.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		393C407D173CAA190055C12E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3954CA60173D5C9800BE3332 /* OnMyWayContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnMyWayContact.h; sourceTree = "<group>"; };
 		3954CA61173D5C9800BE3332 /* OnMyWayContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnMyWayContact.m; sourceTree = "<group>"; };
+		3954CA63173D908300BE3332 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3954CA64173D908300BE3332 /* MessageUI.framework in Frameworks */,
 				393C407E173CAA190055C12E /* CoreLocation.framework in Frameworks */,
 				393C407C173CA1D30055C12E /* AddressBook.framework in Frameworks */,
 				393C407A173C87600055C12E /* AddressBookUI.framework in Frameworks */,
@@ -87,6 +90,7 @@
 		393C4053173C7D010055C12E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3954CA63173D908300BE3332 /* MessageUI.framework */,
 				393C407D173CAA190055C12E /* CoreLocation.framework */,
 				393C407B173CA1D30055C12E /* AddressBook.framework */,
 				393C4079173C87600055C12E /* AddressBookUI.framework */,

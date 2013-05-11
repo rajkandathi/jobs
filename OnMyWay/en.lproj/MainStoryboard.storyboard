@@ -68,11 +68,12 @@
                     </view>
                     <connections>
                         <outlet property="greetingTextLabel" destination="UnO-tP-Uq4" id="gss-Oa-jZF"/>
+                        <outlet property="sendUpdatesButton" destination="F3i-p0-vxs" id="NmB-YO-J2r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="266" y="76"/>
+            <point key="canvasLocation" x="275" y="68"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

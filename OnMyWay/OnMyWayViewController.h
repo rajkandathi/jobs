@@ -11,9 +11,10 @@
 #import <AddressBook/AddressBook.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OnMyWayContact.h"
+#import <MessageUI/MessageUI.h>
 
 
 @interface OnMyWayViewController : UIViewController
-<ABPeoplePickerNavigationControllerDelegate, CLLocationManagerDelegate>
+<ABPeoplePickerNavigationControllerDelegate, CLLocationManagerDelegate, MFMessageComposeViewControllerDelegate>
 
 @end

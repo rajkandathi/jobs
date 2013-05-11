@@ -6,6 +6,13 @@
 //  Copyright (c) 2013 Raj K. All rights reserved.
 //
 
+
+/**
+ * The controller lets you pick a contact from your contact and
+ * helps you send a message to your contact along with your 
+ * distance details.
+ **/
+
 #import "OnMyWayViewController.h"
 
 @interface OnMyWayViewController ()
@@ -15,7 +22,7 @@
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic) BOOL didPickDestination;
 @property (nonatomic, strong) OnMyWayContact *contact;
-@property (nonatomic) BOOL didFinishLookingUpAddress;
+@property (weak, nonatomic) IBOutlet UIButton *sendUpdatesButton;
 
 @end
 
@@ -25,7 +32,8 @@
 @synthesize currentLocation = _currentLocation;
 @synthesize locationManager = _locationManager;
 @synthesize didPickDestination = _didPickDestination;
-@synthesize didFinishLookingUpAddress = _didFinishLookingUpAddress;
+@synthesize sendUpdatesButton = _sendUpdatesButton;
+
 
 - (ABPeoplePickerNavigationController *)peoplePicker
 {
@@ -51,34 +59,50 @@
     return _contact;
 }
 
+//Alert View to display various error conditions. 
 - (void)showAlertMessage:(NSString *)message
 {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Hey there!" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     [alertView show];
 }
 
+/* The method initializes the greeting message on the main Screen along
+ * with a mini instruction. Attributed strings are used for fun to achieve
+ * different colors within the label message.
+ */
 - (void)updateGreetingLabel
 {
-    //TODO: Try and figure to use an attribute string here.
     NSMutableString *greeting = [[NSMutableString alloc] init];
+    NSString *instruction = @"<Tap '+' to pick a Contact>";
+    NSString *commaSpace = @", ";
     if (self.didPickDestination) {
-        if (self.contact. destinationContactName) {
+        if (self.contact.destinationContactName) {
             [greeting appendString:self.contact.destinationContactName];
-            [greeting appendString:@", "];
+            [greeting appendString:commaSpace];
         }
     } else {
-        [greeting appendString:@"<Tap '+' to pick a Contact>, "];
+        [greeting appendString:instruction];
+        [greeting appendString:commaSpace];
     }
     
     [greeting appendString:@"I am on my way to visit you."];
-    self.greetingTextLabel.text = greeting;
+    
+    NSMutableAttributedString *attributedGreeting = [[NSMutableAttributedString alloc] initWithString:greeting];
+    if (self.didPickDestination) {
+        [attributedGreeting addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor]
+                                   range:NSMakeRange(0,self.contact.destinationContactName.length)];
+    } else {
+        [attributedGreeting addAttribute:NSForegroundColorAttributeName value:[UIColor redColor]
+                                   range:NSMakeRange(0,instruction.length)];
+    }
+    [self.greetingTextLabel setAttributedText: attributedGreeting];
 }
 
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+	// Assigning as delegate for ABPeoplePickerNavigationController & CLLocationManager.
     self.peoplePicker.peoplePickerDelegate = self;
     self.locationManager.delegate = self;
 }
@@ -86,23 +110,65 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    //Initializing the greeting label.
     self.greetingTextLabel.numberOfLines = 3;
     [self updateGreetingLabel];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
+//Initializes the location manager with minimal properties.
 - (void)startLocationManager
 {
     self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-    //self.locationManager.distanceFilter = 1000;
     [self.locationManager startUpdatingLocation];
 }
 
+//Composes the text message that you send to your contact.
+- (NSString *)getMessage
+{
+    NSMutableString *message = [[NSMutableString alloc] initWithString:@"Hey"];
+    [message appendString:@" "];
+    [message appendString:self.contact.destinationContactName];
+    [message appendString:@", "];
+    [message appendString:@"I am on my way to visit you and I am"];
+    [message appendString:@" "];
+    int distance = round([self.currentLocation distanceFromLocation:self.contact.destinationLocation] * 0.00062137);
+    [message appendString:[NSString stringWithFormat:@"%i",distance]];
+    [message appendString:@" "];
+    [message appendString:@"miles away."];
+    
+    return message;
+}
+
+//Kicks of the MFMessageComposeViewController with required details to send a text message.
+- (void)sendMessageToContact
+{
+    MFMessageComposeViewController *mfMessageComposeViewController = [[MFMessageComposeViewController alloc] init];
+    if ([MFMessageComposeViewController canSendText]) {
+        mfMessageComposeViewController.recipients = [NSArray arrayWithObject:self.contact.destinationContactNumber];
+        mfMessageComposeViewController.body = [self getMessage];
+        mfMessageComposeViewController.messageComposeDelegate = self;
+        [self presentViewController:mfMessageComposeViewController animated:YES completion:nil];        
+    }
+}
+
+//Forward lookup of the address to get location co-ordinates.
+- (void)getLocationFromAddressDictionary:(NSDictionary *)address
+{
+    CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
+    [geoCoder geocodeAddressDictionary:address
+                     completionHandler:^(NSArray *placemarks, NSError *error)
+     {
+         if (!error) {
+             CLPlacemark *placemark = [placemarks lastObject];
+             self.contact.destinationLocation = placemark.location;
+             [self sendMessageToContact];
+         } else {
+             [self showAlertMessage:@"oops, there was some problem looking up the location. Sorry :("];
+         }
+     }];
+}
+
+//Action to pick contact. Also validates necessary compatibility for the app to work.
 - (IBAction)AddContact:(id)sender
 {
     //TODO: Check to see if location service is available.
@@ -111,27 +177,12 @@
     [self startLocationManager];
 }
 
-
-- (IBAction)sendUpdate:(id)sender {
-    
-}
-
-- (void)setLocationFromAddressDictionary:(NSDictionary *)address
+- (IBAction)sendUpdate:(id)sender
 {
-    CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
-    [geoCoder geocodeAddressDictionary:address
-                     completionHandler:^(NSArray *placemarks, NSError *error)
-    {
-        if (!error) {
-            CLPlacemark *placemark = [placemarks lastObject];
-            self.contact.destinationLocation = placemark.location;
-            self.didFinishLookingUpAddress = YES;
-            NSLog(@"%@", self.contact.destinationLocation);
-        }
-    }];
+    [self getLocationFromAddressDictionary:self.contact.destinationAddress];
 }
 
-
+//Reads Address details for a given contact.
 - (NSDictionary *)getAddressOfPerson:(ABRecordRef)person
 {
     ABMultiValueRef address = ABRecordCopyValue(person, kABPersonAddressProperty);
@@ -140,6 +191,7 @@
     return addressDictionary;
 }
 
+//Reads the contact name.
 - (NSString *)getPersonName:(ABRecordRef)person
 {
     NSString *fullName = (__bridge NSString *)(ABRecordCopyCompositeName(person));
@@ -148,7 +200,7 @@
 
 /*
  This method is looking for mobile number from the contact.
- Could also be extended to look for other numbers if Mobile isn't available 
+ Note: could also be extended to look for other numbers if Mobile isn't available 
 */
 - (NSString *)getPhoneNumber:(ABRecordRef)person
 {
@@ -158,6 +210,24 @@
         phoneNumber = (__bridge NSString *)ABMultiValueCopyValueAtIndex(phones, 0);
     }
     return phoneNumber;
+}
+
+#pragma mark MFMessageComposeViewControllerDelegate methods
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+	switch (result) {
+		case MessageComposeResultCancelled:
+			break;
+		case MessageComposeResultFailed:
+            break;
+		case MessageComposeResultSent:
+			break;
+		default:
+			break;
+	}
+    
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark ABPeoplePickerNavigationControllerDelegate methods.
@@ -183,7 +253,7 @@
         if (!address) {
             [self showAlertMessage:@"Looks like you don't have an address saved for your contact. Save an address to send update messages."];
         } else {
-            [self setLocationFromAddressDictionary:address];
+            self.contact.destinationAddress = address;
         }
     }];
     return NO;
@@ -209,14 +279,10 @@
     if (self.currentLocation == nil || self.currentLocation.horizontalAccuracy > location.horizontalAccuracy)
     {
         self.currentLocation = location;
-        NSLog(@"%@", self.currentLocation);  
         if (location.horizontalAccuracy <= self.locationManager.desiredAccuracy) {
             [self.locationManager stopUpdatingLocation];
         }
     }
 }
-
-
-
 
 @end

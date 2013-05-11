@@ -13,6 +13,7 @@
 @synthesize destinationContactName = _destinationContactName;
 @synthesize destinationContactNumber = _destinationContactNumber;
 @synthesize destinationLocation = _destinationLocation;
+@synthesize destinationAddress = _destinationAddress;
 
 - (NSString *)destinationContactName
 {
@@ -36,6 +37,14 @@
         _destinationLocation = [[CLLocation alloc] init];
     }
     return _destinationLocation;
+}
+
+- (NSDictionary *)destinationAddress
+{
+    if (!_destinationAddress) {
+        _destinationAddress = [[NSDictionary alloc] init];
+    }
+    return _destinationAddress;
 }
 
 @end
